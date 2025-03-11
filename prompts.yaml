@@ -7,6 +7,7 @@ ExtractEntitiesPrompt:
   prompt: |
     Domain Context: {domain_text}
     ##############################
+    {example}
     Please extract all the entities from the above text. these entities may include elements, compounds, ions, and so on.
     Be concise and your reply should be all in English.
 
@@ -26,6 +27,14 @@ ExtractReactionsPrompt:
     - Ensure the reply is entirely in English.
     - Be as concise as possible.
     - Requires strictly LaTeX output format.
+
+ExtractEntityExample:
+  description: 用于few-shot的示例，抽取实体
+  type: example
+  prompt: |
+    Output Example: (Your reply may be consist of many such examples)
+    - entity_type: Element  # one of Element, Compound and Ion
+    - entity_name: Na  # should be symbol of element or ion or compound like Na, Na^+, NaCl 
 
 ExtractReactionExample:
   description: 用于few-shot的示例，抽取反应

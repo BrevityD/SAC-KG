@@ -19,13 +19,18 @@ class Pipeline:
     def extract_entities(self, text_file: str) -> Dict:
         prompt = self.prompts["ExtractEntitiesPrompt"]
         system_prompt = prompt["system"]
+        example = self.prompts["ExtractEntityExample"]["prompt"]
 
         with open(text_file, "r", encoding="utf8") as f:
             text = "\n".join(f.readlines())
         corpus = SeeridiaChemistryNoteCorpus(text)
         corpus.clean()
         logger.debug("Corpus processed")
-        user_prompt = self.model.render_prompt(prompt, domain_text=corpus.get_samples(0))
+        user_prompt = self.model.render_prompt(
+            prompt,
+            domain_text=corpus.get_samples(0),
+            example=example
+        )
 
         response = self.model.call_model(
             system_prompt,
