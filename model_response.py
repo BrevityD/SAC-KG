@@ -13,6 +13,7 @@ class ModelResponse:
         )
 
     def call_model(self, system_prompt: str, user_prompt: str, model: str="gpt-4o", out_structure=None) -> str:
+        logger.debug("Call Model...")
         if not out_structure:
             response = self.client.chat.completions.create(
                 model=model,
@@ -31,7 +32,7 @@ class ModelResponse:
             response_format=out_structure
         )
         if response.choices[0].message.parsed:
-            logger.debug(f"ModelOutput: {response.choices[0].message}")
+            logger.debug(f"Model Output: {response.choices[0].message}")
             return response.choices[0].message.parsed
         return None
 

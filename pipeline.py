@@ -1,8 +1,10 @@
 import argparse
 import json
+from pathlib import Path
 from typing import Dict
 
 from dotenv import load_dotenv
+from loguru import logger
 
 from corpus import SeeridiaChemistryNoteCorpus
 from frame import Entities, Reactions
@@ -22,6 +24,7 @@ class Pipeline:
             text = "\n".join(f.readlines())
         corpus = SeeridiaChemistryNoteCorpus(text)
         corpus.clean()
+        logger.debug("Corpus processed")
         user_prompt = self.model.render_prompt(prompt, domain_text=corpus.get_samples(0))
 
         response = self.model.call_model(
@@ -41,6 +44,7 @@ class Pipeline:
             text = "\n".join(f.readlines())
         corpus = SeeridiaChemistryNoteCorpus(text)
         corpus.clean()
+        logger.debug("Corpus processed")
         user_prompt = self.model.render_prompt(
             prompt,
             domain_text=corpus.get_samples(0),
@@ -66,15 +70,17 @@ def main():
     load_dotenv()
     pipeline = Pipeline()
 
+    logger.debug(f"You are trying to extract {args.mode} in {args.text} and save to {args.output_file}")
+
     if args.mode == "entities":
         result = pipeline.extract_entities(args.text)
     else:
         result = pipeline.extract_reactions(args.text)
 
-    with open(args.output_file, "w", encoding="utf8") as f:
+    with open(Path("output", args.output_file), "w", encoding="utf8") as f:
         json.dump(result, f, indent=4)
 
-    print(result)
+    logger.debug(f"Final Result:\n{result}")
 
 if __name__ == "__main__":
     main()
