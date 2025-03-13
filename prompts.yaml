@@ -1,7 +1,7 @@
 ExtractEntitiesPrompt:
   description: 用于从文本中抽取实体（暂时只包括元素、分子、离子）
   type: prompt_template
-  inputs: domain_text
+  inputs: domain_text, example
   return_type: Entities
   system: You are ChatGPT, you will extract all the entities from a piece of text.
   prompt: |
