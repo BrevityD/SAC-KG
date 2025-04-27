@@ -1,0 +1,48 @@
+ExtractEntitiesPrompt:
+  description: 用于从文本中抽取实体（暂时只包括元素、分子、离子）
+  type: prompt_template
+  inputs: domain_text, example
+  return_type: Entities
+  system: You are ChatGPT, you will extract all the entities from a piece of text.
+  prompt: |
+    Domain Context: {domain_text}
+    ##############################
+    {example}
+    Please extract all the entities from the above text. these entities may include elements, compounds, ions, and so on.
+    Be concise and your reply should be all in English.
+
+ExtractReactionsPrompt:
+  description: 用于抽取文本中所有反应
+  type: prompt_template
+  inputs: domain_text, example
+  return_type: Reactions
+  system: You are ChatGPT, you will extract all specific informations from a piece of text. These informations must be output strictly in Latex output format
+  prompt: |
+    Domain Context: {domain_text}
+    ##############################
+    {example}
+    Please extract all the chemical reactions from the above text. The reactions must have clear reaction equation and be output strictly in json format.
+    Output Requirements:
+    - Do not include any extra commentary or text outside the JSON structure.
+    - Ensure the reply is entirely in English.
+    - Be as concise as possible.
+    - Requires strictly LaTeX output format.
+
+ExtractEntityExample:
+  description: 用于few-shot的示例，抽取实体
+  type: example
+  prompt: |
+    Output Example: (Your reply may be consist of many such examples)
+    - entity_type: Element  # one of Element, Compound and Ion
+    - entity_name: Na  # should be symbol of element or ion or compound like Na, Na^+, NaCl 
+
+ExtractReactionExample:
+  description: 用于few-shot的示例，抽取反应
+  type: example
+  prompt: |
+    Output Example: (Your reply may be consist of many such examples)
+    - reaction_type: Redox  # one of Redox, Neutralization, Others
+    - equation: 2Na + 2H_2O -> 2Na^+ + 2OH^- + H_2  # should be strictly in latex format
+    - conditions: None  # should be ignite, heat, electrify and so on, \\Delta means heat
+    - reactants: [Na, H_2O]
+    - products: [Na^+, OH^-, H_2]
